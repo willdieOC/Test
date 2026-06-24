@@ -19,6 +19,7 @@
             background-color: #000;
             overflow: hidden;
             user-select: none;
+            position: relative;
         }
 
         /* ЭФФЕКТ ЭЛТ-МОНИТОРА */
@@ -33,7 +34,7 @@
             pointer-events: none;
         }
 
-        /* ЭКРАН ЗАГРУЗКИ (ОБХОД БЛОКИРОВКИ ЗВУКА) */
+        /* ЭКРАН ЗАГРУЗКИ */
         #boot-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -82,6 +83,40 @@
             gap: 20px;
         }
 
+        /* СЛОЙ РАЗРУШЕНИЯ ЭКРАНА (ТРЕЩИНЫ И ДЫРЫ) */
+        #destruction-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: calc(100vh - 40px);
+            pointer-events: none;
+            z-index: 4000;
+        }
+
+        /* Стиль для дыр в фиолетовую пустоту */
+        .void-hole {
+            position: absolute;
+            background: radial-gradient(circle, #2d004d 0%, #0d001a 70%, rgba(0,0,0,0) 100%);
+            border-radius: 50%;
+            filter: blur(2px);
+            box-shadow: inset 0 0 20px #b57cff;
+            opacity: 0;
+            transition: opacity 2s;
+            animation: void-pulse 3s infinite alternate;
+        }
+
+        @keyframes void-pulse {
+            0% { transform: scale(0.95); filter: drop-shadow(0 0 5px #7b2cbf); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 15px #ff0055); }
+        }
+
+        /* Сетка цифровых трещин */
+        .crack-line {
+            position: absolute;
+            background: rgba(181, 124, 255, 0.4);
+            box-shadow: 0 0 4px #b57cff;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
         /* ЯРЛЫКИ */
         .shortcut {
             width: 95px;
@@ -111,16 +146,9 @@
             font-size: 18px;
         }
 
-        .shortcut.purple-theme .icon {
-            background-color: #b57cff !important;
-            border-color: #fff;
-        }
+        .shortcut.purple-theme .icon { background-color: #b57cff !important; border-color: #fff; }
 
-        .center-file {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
+        .center-file { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         .center-file .icon {
             background-color: #ff0055 !important;
             border-color: #fff !important;
@@ -167,19 +195,8 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        .window-body {
-            padding: 18px;
-            font-size: 12px;
-            color: #000;
-            line-height: 1.5;
-        }
-
-        .window-footer {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
+        .window-body { padding: 18px; font-size: 12px; color: #000; line-height: 1.5; }
+        .window-footer { padding: 10px; display: flex; justify-content: center; gap: 10px; }
 
         .win95-btn {
             background: #cbd3d7;
@@ -188,17 +205,10 @@
             padding: 4px 25px; font-size: 12px; cursor: pointer;
             box-shadow: 1px 1px 0 #000;
         }
-        .win95-btn:active {
-            border: 1px solid #555; border-right-color: #fff; border-bottom-color: #fff; box-shadow: none;
-        }
 
         /* ИМИТАЦИЯ ЗАГРУЗКИ В БРАУЗЕРЕ */
-        .loading-bar-container {
-            width: 100%; background: #fff; border: 2px inset #fff; height: 20px; margin-top: 15px; display: none; position: relative;
-        }
-        .loading-fill {
-            width: 0%; height: 100%; background: #000080; transition: width 0.1s linear;
-        }
+        .loading-bar-container { width: 100%; background: #fff; border: 2px inset #fff; height: 20px; margin-top: 15px; display: none; }
+        .loading-fill { width: 0%; height: 100%; background: #000080; transition: width 0.1s linear; }
 
         /* ПАНЕЛЬ ЗАДАЧ */
         .taskbar {
@@ -206,20 +216,13 @@
             position: fixed; bottom: 0; left: 0;
             display: flex; align-items: center; justify-content: space-between; padding: 2px 6px; z-index: 5000;
         }
-
-        .taskbar.sys-compromised {
-            background: #1a052e !important;
-            border-top-color: #ff0055 !important;
-        }
+        .taskbar.sys-compromised { background: #1a052e !important; border-top-color: #ff0055 !important; }
 
         .start-button {
             background: #cbd3d7; border: 2px solid #fff;
             border-right-color: #555; border-bottom-color: #555;
             font-weight: bold; font-size: 12px; padding: 2px 12px;
             display: flex; align-items: center; gap: 4px; cursor: pointer; box-shadow: 1px 1px 0 #000;
-        }
-        .start-button.active-btn {
-            border: 2px solid #555; border-right-color: #fff; border-bottom-color: #fff; box-shadow: none;
         }
 
         /* МЕНЮ ПУСК */
@@ -228,12 +231,9 @@
             width: 180px; background: #cbd3d7;
             border: 2px solid #fff; border-right-color: #555; border-bottom-color: #555;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            display: none; flex-direction: column; z-index: 6000;
-            padding: 2px;
+            display: none; flex-direction: column; z-index: 6000; padding: 2px;
         }
-        .menu-item {
-            padding: 6px 10px; font-size: 12px; color: #000; display: flex; align-items: center; gap: 8px; cursor: pointer;
-        }
+        .menu-item { padding: 6px 10px; font-size: 12px; color: #000; display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .menu-item:hover { background: #000080; color: #fff; }
         .menu-divider { height: 1px; background: #555; margin: 4px 2px; border-bottom: 1px solid #fff; }
 
@@ -243,7 +243,6 @@
         }
         .systray.alert-mode { background: #200336 !important; color: #ff0055 !important; border-color: #ff0055; }
 
-        /* ВСПЫШКА ГЛИТЧА ПРИ ВЫКЛЮЧЕНИИ */
         #glitch-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%;
             background: #ff0055; opacity: 0; pointer-events: none; z-index: 99998;
@@ -253,14 +252,29 @@
             50% { opacity: 0.9; background: #ff0055; }
             100% { opacity: 0; }
         }
+
+        /* КРИТИЧЕСКИЙ ЭКРАН СМЕРТИ (BDOS) */
+        #bdos-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050010;
+            color: #b57cff;
+            padding: 50px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            z-index: 999999;
+            display: none;
+            text-shadow: 0 0 5px #7b2cbf;
+        }
     </style>
 </head>
 <body class="crt">
 
     <audio id="startup-sound" src="windows-95-1995-startup.mp3" preload="auto"></audio>
-
     <div id="glitch-overlay"></div>
 
+    <!-- ТЕХНИЧЕСКИЙ БУТ-ЭКРАН BIOS -->
     <div id="boot-screen">
         <div>
             <p>CORE_OS V8.85 — INITIALIZING HARDWARE PROTOCOLS...</p>
@@ -275,9 +289,13 @@
         </div>
     </div>
 
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС ОПЕРАЦИОННОЙ СИСТЕМЫ -->
     <div id="os-desktop">
+        
+        <!-- СЛОЙ ДЛЯ ТРЕЩИН И ДЫР КРАЯ -->
+        <div id="destruction-layer"></div>
+
         <div class="desktop-area">
-            
             <div class="shortcut">
                 <div class="icon">💻</div>
                 <div>My Computer</div>
@@ -297,9 +315,9 @@
                 <div class="icon">👁️</div>
                 <div style="font-weight: bold; color: #ffb3d1;">broken_end_DIM1.exe</div>
             </div>
-
         </div>
 
+        <!-- ОКНА -->
         <div class="window" id="warning-txt-box">
             <div class="window-header">
                 <span>warning_26.txt — Блокнот</span>
@@ -308,7 +326,7 @@
             <div class="window-body" style="background: #fff; font-family: monospace; overflow-y: auto; max-height: 250px;">
                 <p style="font-weight: bold; margin-bottom: 10px; color: #d00000;">⚠️ [КРИТИЧЕСКАЯ СВОДКА ДЛЯ ПЕРСОНАЛА И ИГРОКОВ] ⚠️</p>
                 <p style="margin-bottom: 8px;">Запуск основного хоста и игрового сервера назначен на 26 июня.</p>
-                <p style="margin-bottom: 8px;"><b>ОБНАРУЖЕНА УГРОЗА ЯДРА:</b> Полная изоляция сущности в секторе DIM1 (The End) провалилась. Нам удалось урезать его общую мощность, но права Оператора внутри Края всё ещё закреплены за ним.</p>
+                <p style="margin-bottom: 8px;"><b>ОБНАРУЖЕНА УГРОЗА ЯДРА:</b> Полная изоляция сущности в секторе DIM1 (The End) провалилась.</p>
                 <p style="margin-bottom: 8px;">При запуске сервера 26 июня будьте готовы к деструктивным аномалиям: сущность способна стирать и вырезать случайные чанки мира прямо во время игрового процесса.</p>
                 <p>Протокол LK VIII уже запущен в системной шине ОС. Спасайте структуры, пока есть время.</p>
             </div>
@@ -339,32 +357,22 @@
             </div>
             <div class="window-body">
                 <div id="explorer-status">Подключение к удаленным узлам...</div>
-                
-                <div class="loading-bar-container" id="loading-bar">
-                    <div class="loading-fill" id="loading-fill"></div>
-                </div>
-
+                <div class="loading-bar-container" id="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
                 <p id="explorer-error" style="color: #ff0055; font-weight: bold; margin-top: 15px; display: none; text-align: center;">
                     [Ошибка 0x85_DIM]: Нет доступа к сети.<br>Удаленный шлюз не отвечает или полностью изолирован.
                 </p>
             </div>
-            <div class="window-footer" id="explorer-footer" style="display: none;">
-                <button class="win95-btn" onclick="closeExplorer()">ОК</button>
-            </div>
+            <div class="window-footer" id="explorer-footer" style="display: none;"><button class="win95-btn" onclick="closeExplorer()">ОК</button></div>
         </div>
 
         <div class="window" id="shutdown-error-box" style="width: 360px; z-index: 7000;">
-            <div class="window-header glitched">
-                <span>SYSTEM_LOCKDOWN</span>
-            </div>
+            <div class="window-header glitched"><span>SYSTEM_LOCKDOWN</span></div>
             <div class="window-body" style="text-align: center; font-weight: bold; color: #000;">
                 <p>[ОШИБКА ОБРЫВА ПИТАНИЯ]</p>
                 <p style="margin-top: 10px; color: #ff0055; font-size: 14px;">Вы не можете завершить этот процесс.</p>
                 <p style="margin-top: 5px; color: #420427;">Увидимся 26 июня.</p>
             </div>
-            <div class="window-footer">
-                <button class="win95-btn" onclick="closeShutdownError()">Принять неизбежное</button>
-            </div>
+            <div class="window-footer"><button class="win95-btn" onclick="closeShutdownError()">Принять неизбежное</button></div>
         </div>
 
         <div class="start-menu" id="start-menu-box">
@@ -375,19 +383,36 @@
             <div class="menu-item" onclick="triggerFakeShutdown()">🔌 Shutdown...</div>
         </div>
 
+        <!-- ПАНЕЛЬ ЗАДАЧ -->
         <div class="taskbar" id="main-taskbar">
             <button class="start-button" id="start-btn" onclick="toggleStartMenu()">
                 <span style="font-size:14px;">🏁</span> Start
             </button>
-            
-            <div class="systray" id="timer-tray">
-                До критического сценария LK VIII осталось: --:--:--
-            </div>
+            <div class="systray" id="timer-tray">До критического сценария LK VIII осталось: --:--:--</div>
         </div>
+    </div>
+
+    <!-- ТЕКСТ ДЛЯ ЭКРАНА СМЕРТИ (BDOS) -->
+    <div id="bdos-screen">
+        <p style="background: #ff0055; color: #fff; display: inline-block; padding: 2px 10px; font-weight: bold; margin-bottom: 20px;">⚡ SYSTEM_COLLAPSE_DIM1 ⚡</p>
+        <p>A fatal exception 0xLK_VIII_BREACH has occurred at CORE_PROCESSOR_BUS_LINE.</p>
+        <p>The current session was terminated due to complete dimension structural loss.</p>
+        <br>
+        <p>* Сдерживание Серафима внутри DIM1 нарушено на 100%.</p>
+        <p>* Все системные файлы и структуры данных ядра деформированы.</p>
+        <p>* Чанки Края начали автономное стирание в фоновом потоке хоста.</p>
+        <br>
+        <p>CURRENT STATUS: DISCONNECTED FROM SERVER CORE.</p>
+        <p style="color: #ff0055; font-weight: bold; animation: glitch-blink 1s infinite alternate;">УГРОЗА ОПЕРАТОРА ВЫШЛА НА СТАТИЧЕСКИЙ ЭТАП.</p>
+        <br>
+        <p>Для продолжения выполните физическое подключение к миру 26 ИЮНЯ.</p>
+        <p>Нажмите любую клавишу для ожидания запуска...</p>
     </div>
 
     <script>
         let systemCompromised = false;
+        let destructionTimer = null;
+        let startTime = null;
 
         function bootSystem() {
             document.getElementById('boot-screen').style.display = 'none';
@@ -399,9 +424,71 @@
 
             setInterval(updateLoreTimer, 1000);
             updateLoreTimer();
+
+            // Запуск таймера разрушения (3 минуты = 180000 мс)
+            startTime = Date.now();
+            destructionTimer = setInterval(processDestruction, 1500);
         }
 
-        // Логика кнопки Старт и Меню
+        // ЛОГИКА РАЗРУШЕНИЯ ЭКРАНА
+        function processDestruction() {
+            const elapsed = Date.now() - startTime;
+            const layer = document.getElementById('destruction-layer');
+            
+            if (elapsed >= 180000) { // 3 минуты истекли
+                clearInterval(destructionTimer);
+                triggerBDOS();
+                return;
+            }
+
+            // ЭТАП 1: Создание трещин (начинаются сразу)
+            if (Math.random() > 0.4) {
+                const crack = document.createElement('div');
+                crack.classList.add('crack-line');
+                
+                const isVert = Math.random() > 0.5;
+                crack.style.width = isVert ? '2px' : Math.floor(Math.random() * 120 + 30) + 'px';
+                crack.style.height = isVert ? Math.floor(Math.random() * 120 + 30) + 'px' : '2px';
+                crack.style.left = Math.floor(Math.random() * window.innerWidth) + 'px';
+                crack.style.top = Math.floor(Math.random() * (window.innerHeight - 40)) + 'px';
+                
+                layer.appendChild(crack);
+                setTimeout(() => crack.style.opacity = "0.7", 50);
+            }
+
+            // ЭТАП 2: Появление фиолетовых дыр в Пустоту Края (начинается после 2-й минуты / 120000 мс)
+            if (elapsed > 120000 && Math.random() > 0.5) {
+                const hole = document.createElement('div');
+                hole.classList.add('void-hole');
+                
+                const size = Math.floor(Math.random() * 70) + 30; // Размер дыр от 30 до 100px
+                hole.style.width = size + 'px';
+                hole.style.height = size + 'px';
+                hole.style.left = Math.floor(Math.random() * (window.innerWidth - size)) + 'px';
+                hole.style.top = Math.floor(Math.random() * (window.innerHeight - 40 - size)) + 'px';
+                
+                layer.appendChild(hole);
+                setTimeout(() => hole.style.opacity = "1", 50);
+            }
+        }
+
+        // КРИТИЧЕСКИЙ ЭКРАН СМЕРТИ (BDOS)
+        function triggerBDOS() {
+            document.getElementById('os-desktop').style.display = 'none';
+            document.getElementById('bdos-screen').style.display = 'block';
+
+            // Вызов жуткого финального писка ошибки
+            try {
+                let context = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = context.createOscillator();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(80, context.currentTime);
+                osc.connect(context.destination);
+                osc.start();
+                osc.stop(context.currentTime + 1.2);
+            } catch(e){}
+        }
+
         function toggleStartMenu() {
             const menu = document.getElementById('start-menu-box');
             const btn = document.getElementById('start-btn');
@@ -414,52 +501,29 @@
             }
         }
 
-        // Закрытие меню при клике по рабочему столу
         document.querySelector('.desktop-area').addEventListener('click', () => {
             document.getElementById('start-menu-box').style.display = 'none';
             document.getElementById('start-btn').classList.remove('active-btn');
         });
 
-        // ФИШКА 2: Имитация выключения с глитчем
         function triggerFakeShutdown() {
             document.getElementById('start-menu-box').style.display = 'none';
             document.getElementById('start-btn').classList.remove('active-btn');
-
-            // Вспышка глитча
             const overlay = document.getElementById('glitch-overlay');
             overlay.style.animation = "flash 0.4s ease-out";
-            
-            // Имитируем звук критической ошибки через дефолтный системный писк браузера
-            try {
-                let context = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = context.createOscillator();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(120, context.currentTime);
-                osc.connect(context.destination);
-                osc.start();
-                osc.stop(context.currentTime + 0.3);
-            } catch(e){}
-
             setTimeout(() => {
                 overlay.style.animation = "";
                 document.getElementById('shutdown-error-box').style.display = 'block';
             }, 400);
         }
 
-        function closeShutdownError() {
-            document.getElementById('shutdown-error-box').style.display = 'none';
-        }
-
-        // Окна warning_26.txt
+        function closeShutdownError() { document.getElementById('shutdown-error-box').style.display = 'none'; }
         function openWarningTxt() { document.getElementById('warning-txt-box').style.display = 'block'; }
         function closeWarningTxt() { document.getElementById('warning-txt-box').style.display = 'none'; }
-
-        // Окно broken_end_DIM1
         function openErrorWindow() { document.getElementById('error-box').style.display = 'block'; }
         function closeErrorWindow() { document.getElementById('error-box').style.display = 'none'; }
         function goToTargetSite() { window.location.href = "https://willdieoc.github.io/youdontsaveLK"; }
 
-        // Логика Enternet Explorer
         function openExplorer() {
             document.getElementById('explorer-box').style.display = 'block';
             const status = document.getElementById('explorer-status');
@@ -492,7 +556,6 @@
 
         function closeExplorer() { document.getElementById('explorer-box').style.display = 'none'; }
 
-        // ФИШКА 3: ТОЧНЫЙ ТАЙМЕР И ИЗМЕНЕНИЕ СИСТЕМЫ ПОСЛЕ СБОЯ
         function updateLoreTimer() {
             const tray = document.getElementById('timer-tray');
             const taskbar = document.getElementById('main-taskbar');
@@ -505,8 +568,6 @@
             if (diff < 0) {
                 isNegative = true;
                 diff = Math.abs(diff);
-                
-                // Перекрашиваем интерфейс при уходе в минус (Сценарий запущен)
                 if (!systemCompromised) {
                     tray.classList.add('alert-mode');
                     taskbar.classList.add('sys-compromised');
