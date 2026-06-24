@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE_OS // GATEWAY_95</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tahoma', 'Geneva', sans-serif;
+            image-rendering: pixelated;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #008080; /* Классический бирюзовый цвет рабочего стола Win95 */
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Эффект старого ЭЛТ-монитора */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%);
+            z-index: 99999;
+            background-size: 100% 3px;
+            pointer-events: none;
+        }
+
+        /* РАБОЧИЙ СТОЛ */
+        .desktop {
+            width: 100%;
+            height: calc(100vh - 40px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-content: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* ЯРЛЫКИ */
+        .shortcut {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            color: white;
+            font-size: 11px;
+            text-shadow: 1px 1px 1px #000;
+        }
+
+        .shortcut:hover .icon {
+            filter: brightness(1.2);
+        }
+
+        .shortcut .icon {
+            width: 32px;
+            height: 32px;
+            background-color: #b57cff; /* Стилизованный фиолетовый сектор Края */
+            border: 2px solid #fff;
+            box-shadow: 2px 2px 0 #000;
+            margin-bottom: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Центрированный файл из запроса */
+        .center-file {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .center-file .icon {
+            background-color: #ff0055 !important;
+            animation: glitch-blink 1.5s infinite alternate;
+        }
+
+        @keyframes glitch-blink {
+            0% { box-shadow: 2px 2px 0 #000; }
+            100% { box-shadow: 0 0 10px #ff0055; border-color: #ff0055; }
+        }
+
+        /* ОКНА WINDOWS 95 */
+        .window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: #cbd3d7;
+            border: 2px solid #fff;
+            border-right-color: #555;
+            border-bottom-color: #555;
+            box-shadow: 2px 2px 0px #000;
+            z-index: 1000;
+            display: none;
+        }
+
+        .window-header {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 4px 6px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-header.glitched {
+            background: linear-gradient(90deg, #420427, #ff0055) !important;
+        }
+
+        .close-btn {
+            background: #cbd3d7;
+            border: 1px solid #fff;
+            border-right-color: #555;
+            border-bottom-color: #555;
+            font-size: 10px;
+            font-weight: bold;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .window-body {
+            padding: 15px;
+            font-size: 12px;
+            color: #000;
+            text-align: center;
+        }
+
+        .window-footer {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .win95-btn {
+            background: #cbd3d7;
+            border: 1px solid #fff;
+            border-right-color: #555;
+            border-bottom-color: #555;
+            padding: 4px 20px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 1px 1px 0 #000;
+        }
+
+        .win95-btn:active {
+            border: 1px solid #555;
+            border-right-color: #fff;
+            border-bottom-color: #fff;
+            box-shadow: none;
+        }
+
+        /* ПАНЕЛЬ ЗАДАЧ (TASKBAR) */
+        .taskbar {
+            width: 100%;
+            height: 40px;
+            background: #cbd3d7;
+            border-top: 2px solid #fff;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2px 6px;
+            z-index: 5000;
+        }
+
+        .start-button {
+            background: #cbd3d7;
+            border: 2px solid #fff;
+            border-right-color: #555;
+            border-bottom-color: #555;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 2px 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: 1px 1px 0 #000;
+        }
+
+        .start-button:active {
+            border: 2px solid #555;
+            border-right-color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        /* СИСТЕМНЫЙ ТРЕЙ И ТАЙМЕР */
+        .systray {
+            background: #cbd3d7;
+            border: 2px inset #fff;
+            padding: 4px 10px;
+            font-size: 11px;
+            color: #000;
+            font-weight: bold;
+            min-width: 320px;
+            text-align: right;
+            transition: background 0.5s;
+        }
+
+        .systray.alert-mode {
+            background: #200336 !important;
+            color: #ff0055 !important;
+            border-color: #ff0055;
+        }
+    </style>
+</head>
+<body onclick="initAudio()">
+
+    <audio id="startup-sound" src="windows-95-1995-startup.mp3" preload="auto"></audio>
+
+    <div class="desktop">
+        
+        <div class="shortcut">
+            <div class="icon">💻</div>
+            <div>My Computer</div>
+        </div>
+
+        <div class="shortcut">
+            <div class="icon">🌐</div>
+            <div>Network</div>
+        </div>
+
+        <div class="shortcut center-file" onclick="openErrorWindow()">
+            <div class="icon">👁️</div>
+            <div style="font-weight: bold; color: #ffb3d1;">broken_end_DIM1.exe</div>
+        </div>
+    </div>
+
+    <div class="window" id="error-box">
+        <div class="window-header glitched">
+            <span>FATAL_ERROR // DIM1_BREACH</span>
+            <button class="close-btn" onclick="closeErrorWindow()">X</button>
+        </div>
+        <div class="window-body">
+            <p style="margin-bottom: 10px; font-weight: bold;">[СЦЕНАРИЙ СЕРАФИМА]: ПОПЫТКА СХРАНЕНИЯ ОШИБОЧНА.</p>
+            <p>Пакет деструкции ядра отправлен на удаленный хост. Вы не спасёте этот сектор.</p>
+        </div>
+        <div class="window-footer">
+            <button class="win95-btn" style="font-weight: bold;" onclick="goToTargetSite()">ПЕРЕЙТИ</button>
+            <button class="win95-btn" onclick="closeErrorWindow()">ОТМЕНА</button>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <button class="start-button">
+            <span style="font-size:14px;">🏁</span> Start
+        </button>
+        
+        <div class="systray" id="timer-tray">
+            До критического сценария LK VIII осталось: --:--:--
+        </div>
+    </div>
+
+    <script>
+        let audioInitialized = false;
+
+        // Воспроизведение звука при первом взаимодействии
+        function initAudio() {
+            if (!audioInitialized) {
+                const sound = document.getElementById('startup-sound');
+                sound.volume = 0.6;
+                sound.play().catch(e => console.log("Аудио заблокировано браузером"));
+                audioInitialized = true;
+            }
+        }
+
+        // Логика окон
+        function openErrorWindow() {
+            document.getElementById('error-box').style.display = 'block';
+        }
+
+        function closeErrorWindow() {
+            document.getElementById('error-box').style.display = 'none';
+        }
+
+        function goToTargetSite() {
+            window.location.href = "https://github.com/willdieOC/youdontsaveLK";
+        }
+
+        // ТАЙМЕР ДО 24 ИЮНЯ 15:00 МСК
+        function updateLoreTimer() {
+            const tray = document.getElementById('timer-tray');
+            
+            // Целевая дата: 24 июня 2026 года, 15:00:00 по Московскому времени (UTC+3)
+            // 15:00 МСК = 12:00 UTC
+            const targetDate = new Date(Date.UTC(2026, 5, 24, 12, 0, 0)); 
+            const now = new Date();
+            
+            let diff = targetDate - now;
+            let isNegative = false;
+
+            if (diff < 0) {
+                isNegative = true;
+                diff = Math.abs(diff); // Считаем "в минус" после прохождения точки
+                tray.classList.add('alert-mode');
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const pad = (num) => num.toString().padStart(2, '0');
+            const sign = isNegative ? "-" : "";
+
+            tray.innerText = `До критического сценария LK VIII осталось: ${sign}${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        // Запуск таймера
+        setInterval(updateLoreTimer, 1000);
+        updateLoreTimer();
+    </script>
+</body>
+</html>
