@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORE_OS // GATEWAY_95</title>
+    <title>legion-king'sOS // GATEWAY_95</title>
     <style>
         * {
             box-sizing: border-box;
@@ -216,8 +216,10 @@
 </head>
 <body class="crt">
 
+    <!-- ЗВУКОВОЙ ДВИЖОК -->
     <audio id="startup-sound" src="windows-95-1995-startup.mp3" preload="auto"></audio>
 
+    <!-- ТЕХНИЧЕСКИЙ БУТ-ЭКРАН BIOS ДЛЯ СНЯТИЯ БЛОКИРОВКИ ЗВУКА -->
     <div id="boot-screen">
         <div>
             <p>CORE_OS V8.85 — INITIALIZING HARDWARE PROTOCOLS...</p>
@@ -232,6 +234,7 @@
         </div>
     </div>
 
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС ОПЕРАЦИОННОЙ СИСТЕМЫ -->
     <div id="os-desktop">
         <div class="desktop-area">
             
@@ -240,11 +243,13 @@
                 <div>My Computer</div>
             </div>
 
+            <!-- Enternet Explorer -->
             <div class="shortcut" onclick="openExplorer()">
                 <div class="icon">🌐</div>
                 <div>Enternet Explorer</div>
             </div>
 
+            <!-- Центральный файл broken_end_DIM1.exe -->
             <div class="shortcut center-file" onclick="openErrorWindow()">
                 <div class="icon">👁️</div>
                 <div style="font-weight: bold; color: #ffb3d1;">broken_end_DIM1.exe</div>
@@ -252,6 +257,7 @@
 
         </div>
 
+        <!-- ОКНО ДЛЯ BROKEN_END_DIM1.EXE -->
         <div class="window" id="error-box">
             <div class="window-header glitched">
                 <span>SECURITY_WARNING // ROOT_ACCESS</span>
@@ -267,6 +273,7 @@
             </div>
         </div>
 
+        <!-- ОКНО ДЛЯ ENTERNET EXPLORER -->
         <div class="window" id="explorer-box">
             <div class="window-header">
                 <span>Enternet Explorer — Сбой подключения</span>
@@ -275,12 +282,13 @@
             <div class="window-body">
                 <div id="explorer-status">Подключение к удаленным узлам...</div>
                 
+                <!-- Шкала загрузки -->
                 <div class="loading-bar-container" id="loading-bar">
                     <div class="loading-fill" id="loading-fill"></div>
                 </div>
 
-                <p id="explorer-error" style="color: #ff0055; font-weight: bold; margin-top: 15px; display: none;">
-                    [Ошибка 0x85_DIM]: Нет доступа к сети. Запрашиваемый шлюз стерт или изолирован Серафимом.
+                <p id="explorer-error" style="color: #ff0055; font-weight: bold; margin-top: 15px; display: none; text-align: center;">
+                    [Ошибка 0x85_DIM]: Нет доступа к сети.<br>Удаленный шлюз не отвечает или полностью изолирован.
                 </p>
             </div>
             <div class="window-footer" id="explorer-footer" style="display: none;">
@@ -288,6 +296,7 @@
             </div>
         </div>
 
+        <!-- ПАНЕЛЬ ЗАДАЧ -->
         <div class="taskbar">
             <button class="start-button">
                 <span style="font-size:14px;">🏁</span> Start
@@ -300,17 +309,15 @@
     </div>
 
     <script>
-        // Функция включения системы и обхода автоплея звука
+        // Функция включения системы
         function bootSystem() {
             document.getElementById('boot-screen').style.display = 'none';
             document.getElementById('os-desktop').style.display = 'block';
             
-            // Воспроизводим звук
             const sound = document.getElementById('startup-sound');
             sound.volume = 0.5;
             sound.play().catch(e => console.log("Ошибка аудио"));
 
-            // Инициализируем таймер
             setInterval(updateLoreTimer, 1000);
             updateLoreTimer();
         }
@@ -318,7 +325,9 @@
         // Окно broken_end_DIM1
         function openErrorWindow() { document.getElementById('error-box').style.display = 'block'; }
         function closeErrorWindow() { document.getElementById('error-box').style.display = 'none'; }
-        function goToTargetSite() { window.location.href = "https://github.com/willdieOC/youdontsaveLK"; }
+        
+        // Новая обновленная ссылка перехода
+        function goToTargetSite() { window.location.href = "https://willdieoc.github.io/youdontsaveLK"; }
 
         // Логика Enternet Explorer
         function openExplorer() {
@@ -329,14 +338,12 @@
             const errMsg = document.getElementById('explorer-error');
             const footer = document.getElementById('explorer-footer');
 
-            // Сброс оконного состояния
-            status.innerText = "Установка соединения со шлюзом github.io/youarenear...";
+            status.innerText = "Установка соединения со шлюзом сети...";
             barContainer.style.display = "block";
             fill.style.width = "0%";
             errMsg.style.display = "none";
             footer.style.display = "none";
 
-            // Имитация загрузки
             let width = 0;
             let interval = setInterval(() => {
                 if (width >= 100) {
@@ -355,7 +362,7 @@
 
         function closeExplorer() { document.getElementById('explorer-box').style.display = 'none'; }
 
-        // ТОЧНЫЙ ТАЙМЕР (До 24 июня 15:00 МСК)
+        // ТАЙМЕР (До 24 июня 15:00 МСК)
         function updateLoreTimer() {
             const tray = document.getElementById('timer-tray');
             const targetDate = new Date(Date.UTC(2026, 5, 24, 12, 0, 0)); // 15:00 МСК
