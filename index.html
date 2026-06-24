@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>legion-king'sOS // GATEWAY_95</title>
+    <title>CORE_OS // GATEWAY_95</title>
     <style>
         * {
             box-sizing: border-box;
@@ -84,7 +84,7 @@
 
         /* ЯРЛЫКИ */
         .shortcut {
-            width: 90px;
+            width: 95px;
             height: 80px;
             display: flex;
             flex-direction: column;
@@ -100,14 +100,20 @@
         .shortcut .icon {
             width: 32px;
             height: 32px;
-            background-color: #b57cff;
+            background-color: #cbd3d7;
             border: 2px solid #fff;
+            border-right-color: #555; border-bottom-color: #555;
             box-shadow: 2px 2px 0 #000;
             margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
+        }
+
+        .shortcut.purple-theme .icon {
+            background-color: #b57cff !important;
+            border-color: #fff;
         }
 
         .center-file {
@@ -117,6 +123,7 @@
         }
         .center-file .icon {
             background-color: #ff0055 !important;
+            border-color: #fff !important;
             animation: glitch-blink 1.5s infinite alternate;
         }
 
@@ -128,9 +135,9 @@
         /* ОКНА WINDOWS 95 */
         .window {
             position: absolute;
-            top: 50%; left: 50%;
+            top: 45%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 420px;
+            width: 440px;
             background: #cbd3d7;
             border: 2px solid #fff;
             border-right-color: #555; border-bottom-color: #555;
@@ -164,7 +171,7 @@
             padding: 18px;
             font-size: 12px;
             color: #000;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .window-footer {
@@ -200,26 +207,60 @@
             display: flex; align-items: center; justify-content: space-between; padding: 2px 6px; z-index: 5000;
         }
 
+        .taskbar.sys-compromised {
+            background: #1a052e !important;
+            border-top-color: #ff0055 !important;
+        }
+
         .start-button {
             background: #cbd3d7; border: 2px solid #fff;
             border-right-color: #555; border-bottom-color: #555;
-            font-weight: bold; font-size: 12px; padding: 2px 8px;
+            font-weight: bold; font-size: 12px; padding: 2px 12px;
             display: flex; align-items: center; gap: 4px; cursor: pointer; box-shadow: 1px 1px 0 #000;
         }
+        .start-button.active-btn {
+            border: 2px solid #555; border-right-color: #fff; border-bottom-color: #fff; box-shadow: none;
+        }
+
+        /* МЕНЮ ПУСК */
+        .start-menu {
+            position: fixed; bottom: 40px; left: 6px;
+            width: 180px; background: #cbd3d7;
+            border: 2px solid #fff; border-right-color: #555; border-bottom-color: #555;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            display: none; flex-direction: column; z-index: 6000;
+            padding: 2px;
+        }
+        .menu-item {
+            padding: 6px 10px; font-size: 12px; color: #000; display: flex; align-items: center; gap: 8px; cursor: pointer;
+        }
+        .menu-item:hover { background: #000080; color: #fff; }
+        .menu-divider { height: 1px; background: #555; margin: 4px 2px; border-bottom: 1px solid #fff; }
 
         .systray {
             background: #cbd3d7; border: 2px inset #fff; padding: 4px 10px;
-            font-size: 11px; color: #000; font-weight: bold; min-width: 330px; text-align: right;
+            font-size: 11px; color: #000; font-weight: bold; min-width: 350px; text-align: right;
         }
         .systray.alert-mode { background: #200336 !important; color: #ff0055 !important; border-color: #ff0055; }
+
+        /* ВСПЫШКА ГЛИТЧА ПРИ ВЫКЛЮЧЕНИИ */
+        #glitch-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: #ff0055; opacity: 0; pointer-events: none; z-index: 99998;
+        }
+        @keyframes flash {
+            0% { opacity: 0.8; background: #b57cff; }
+            50% { opacity: 0.9; background: #ff0055; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="crt">
 
-    <!-- ЗВУКОВОЙ ДВИЖОК -->
     <audio id="startup-sound" src="windows-95-1995-startup.mp3" preload="auto"></audio>
 
-    <!-- ТЕХНИЧЕСКИЙ БУТ-ЭКРАН BIOS ДЛЯ СНЯТИЯ БЛОКИРОВКИ ЗВУКА -->
+    <div id="glitch-overlay"></div>
+
     <div id="boot-screen">
         <div>
             <p>CORE_OS V8.85 — INITIALIZING HARDWARE PROTOCOLS...</p>
@@ -234,7 +275,6 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС ОПЕРАЦИОННОЙ СИСТЕМЫ -->
     <div id="os-desktop">
         <div class="desktop-area">
             
@@ -243,13 +283,16 @@
                 <div>My Computer</div>
             </div>
 
-            <!-- Enternet Explorer -->
-            <div class="shortcut" onclick="openExplorer()">
+            <div class="shortcut purple-theme" onclick="openExplorer()">
                 <div class="icon">🌐</div>
                 <div>Enternet Explorer</div>
             </div>
 
-            <!-- Центральный файл broken_end_DIM1.exe -->
+            <div class="shortcut" onclick="openWarningTxt()">
+                <div class="icon">📄</div>
+                <div style="font-weight: bold;">warning_26.txt</div>
+            </div>
+
             <div class="shortcut center-file" onclick="openErrorWindow()">
                 <div class="icon">👁️</div>
                 <div style="font-weight: bold; color: #ffb3d1;">broken_end_DIM1.exe</div>
@@ -257,7 +300,23 @@
 
         </div>
 
-        <!-- ОКНО ДЛЯ BROKEN_END_DIM1.EXE -->
+        <div class="window" id="warning-txt-box">
+            <div class="window-header">
+                <span>warning_26.txt — Блокнот</span>
+                <button class="close-btn" onclick="closeWarningTxt()">X</button>
+            </div>
+            <div class="window-body" style="background: #fff; font-family: monospace; overflow-y: auto; max-height: 250px;">
+                <p style="font-weight: bold; margin-bottom: 10px; color: #d00000;">⚠️ [КРИТИЧЕСКАЯ СВОДКА ДЛЯ ПЕРСОНАЛА И ИГРОКОВ] ⚠️</p>
+                <p style="margin-bottom: 8px;">Запуск основного хоста и игрового сервера назначен на 26 июня.</p>
+                <p style="margin-bottom: 8px;"><b>ОБНАРУЖЕНА УГРОЗА ЯДРА:</b> Полная изоляция сущности в секторе DIM1 (The End) провалилась. Нам удалось урезать его общую мощность, но права Оператора внутри Края всё ещё закреплены за ним.</p>
+                <p style="margin-bottom: 8px;">При запуске сервера 26 июня будьте готовы к деструктивным аномалиям: сущность способна стирать и вырезать случайные чанки мира прямо во время игрового процесса.</p>
+                <p>Протокол LK VIII уже запущен в системной шине ОС. Спасайте структуры, пока есть время.</p>
+            </div>
+            <div class="window-footer" style="background: #cbd3d7; border-top: 1px solid #888;">
+                <button class="win95-btn" onclick="closeWarningTxt()">Закрыть</button>
+            </div>
+        </div>
+
         <div class="window" id="error-box">
             <div class="window-header glitched">
                 <span>SECURITY_WARNING // ROOT_ACCESS</span>
@@ -273,7 +332,6 @@
             </div>
         </div>
 
-        <!-- ОКНО ДЛЯ ENTERNET EXPLORER -->
         <div class="window" id="explorer-box">
             <div class="window-header">
                 <span>Enternet Explorer — Сбой подключения</span>
@@ -282,7 +340,6 @@
             <div class="window-body">
                 <div id="explorer-status">Подключение к удаленным узлам...</div>
                 
-                <!-- Шкала загрузки -->
                 <div class="loading-bar-container" id="loading-bar">
                     <div class="loading-fill" id="loading-fill"></div>
                 </div>
@@ -296,9 +353,30 @@
             </div>
         </div>
 
-        <!-- ПАНЕЛЬ ЗАДАЧ -->
-        <div class="taskbar">
-            <button class="start-button">
+        <div class="window" id="shutdown-error-box" style="width: 360px; z-index: 7000;">
+            <div class="window-header glitched">
+                <span>SYSTEM_LOCKDOWN</span>
+            </div>
+            <div class="window-body" style="text-align: center; font-weight: bold; color: #000;">
+                <p>[ОШИБКА ОБРЫВА ПИТАНИЯ]</p>
+                <p style="margin-top: 10px; color: #ff0055; font-size: 14px;">Вы не можете завершить этот процесс.</p>
+                <p style="margin-top: 5px; color: #420427;">Увидимся 26 июня.</p>
+            </div>
+            <div class="window-footer">
+                <button class="win95-btn" onclick="closeShutdownError()">Принять неизбежное</button>
+            </div>
+        </div>
+
+        <div class="start-menu" id="start-menu-box">
+            <div class="menu-item" style="color: #888; cursor: not-allowed;">📁 Programs</div>
+            <div class="menu-item" style="color: #888; cursor: not-allowed;">📂 Documents</div>
+            <div class="menu-item" style="color: #888; cursor: not-allowed;">⚙️ Settings</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="triggerFakeShutdown()">🔌 Shutdown...</div>
+        </div>
+
+        <div class="taskbar" id="main-taskbar">
+            <button class="start-button" id="start-btn" onclick="toggleStartMenu()">
                 <span style="font-size:14px;">🏁</span> Start
             </button>
             
@@ -309,7 +387,8 @@
     </div>
 
     <script>
-        // Функция включения системы
+        let systemCompromised = false;
+
         function bootSystem() {
             document.getElementById('boot-screen').style.display = 'none';
             document.getElementById('os-desktop').style.display = 'block';
@@ -322,11 +401,62 @@
             updateLoreTimer();
         }
 
+        // Логика кнопки Старт и Меню
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu-box');
+            const btn = document.getElementById('start-btn');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+                btn.classList.remove('active-btn');
+            } else {
+                menu.style.display = 'flex';
+                btn.classList.add('active-btn');
+            }
+        }
+
+        // Закрытие меню при клике по рабочему столу
+        document.querySelector('.desktop-area').addEventListener('click', () => {
+            document.getElementById('start-menu-box').style.display = 'none';
+            document.getElementById('start-btn').classList.remove('active-btn');
+        });
+
+        // ФИШКА 2: Имитация выключения с глитчем
+        function triggerFakeShutdown() {
+            document.getElementById('start-menu-box').style.display = 'none';
+            document.getElementById('start-btn').classList.remove('active-btn');
+
+            // Вспышка глитча
+            const overlay = document.getElementById('glitch-overlay');
+            overlay.style.animation = "flash 0.4s ease-out";
+            
+            // Имитируем звук критической ошибки через дефолтный системный писк браузера
+            try {
+                let context = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = context.createOscillator();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, context.currentTime);
+                osc.connect(context.destination);
+                osc.start();
+                osc.stop(context.currentTime + 0.3);
+            } catch(e){}
+
+            setTimeout(() => {
+                overlay.style.animation = "";
+                document.getElementById('shutdown-error-box').style.display = 'block';
+            }, 400);
+        }
+
+        function closeShutdownError() {
+            document.getElementById('shutdown-error-box').style.display = 'none';
+        }
+
+        // Окна warning_26.txt
+        function openWarningTxt() { document.getElementById('warning-txt-box').style.display = 'block'; }
+        function closeWarningTxt() { document.getElementById('warning-txt-box').style.display = 'none'; }
+
         // Окно broken_end_DIM1
         function openErrorWindow() { document.getElementById('error-box').style.display = 'block'; }
         function closeErrorWindow() { document.getElementById('error-box').style.display = 'none'; }
-        
-        // Новая обновленная ссылка перехода
         function goToTargetSite() { window.location.href = "https://willdieoc.github.io/youdontsaveLK"; }
 
         // Логика Enternet Explorer
@@ -362,10 +492,11 @@
 
         function closeExplorer() { document.getElementById('explorer-box').style.display = 'none'; }
 
-        // ТАЙМЕР (До 24 июня 15:00 МСК)
+        // ФИШКА 3: ТОЧНЫЙ ТАЙМЕР И ИЗМЕНЕНИЕ СИСТЕМЫ ПОСЛЕ СБОЯ
         function updateLoreTimer() {
             const tray = document.getElementById('timer-tray');
-            const targetDate = new Date(Date.UTC(2026, 5, 24, 12, 0, 0)); // 15:00 МСК
+            const taskbar = document.getElementById('main-taskbar');
+            const targetDate = new Date(Date.UTC(2026, 5, 24, 12, 0, 0)); // 24 июня 15:00 МСК
             const now = new Date();
             
             let diff = targetDate - now;
@@ -374,7 +505,13 @@
             if (diff < 0) {
                 isNegative = true;
                 diff = Math.abs(diff);
-                tray.classList.add('alert-mode');
+                
+                // Перекрашиваем интерфейс при уходе в минус (Сценарий запущен)
+                if (!systemCompromised) {
+                    tray.classList.add('alert-mode');
+                    taskbar.classList.add('sys-compromised');
+                    systemCompromised = true;
+                }
             }
 
             const hours = Math.floor(diff / (1000 * 60 * 60));
