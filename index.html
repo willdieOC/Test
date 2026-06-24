@@ -16,13 +16,13 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: #008080; /* Классический бирюзовый цвет рабочего стола Win95 */
+            background-color: #000;
             overflow: hidden;
             user-select: none;
         }
 
-        /* Эффект старого ЭЛТ-монитора */
-        body::before {
+        /* ЭФФЕКТ ЭЛТ-МОНИТОРА */
+        .crt::before {
             content: " ";
             display: block;
             position: fixed;
@@ -33,8 +33,45 @@
             pointer-events: none;
         }
 
-        /* РАБОЧИЙ СТОЛ */
-        .desktop {
+        /* ЭКРАН ЗАГРУЗКИ (ОБХОД БЛОКИРОВКИ ЗВУКА) */
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            color: #aaa;
+            padding: 30px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .boot-btn {
+            background: transparent;
+            border: 1px dashed #aaa;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            font-family: monospace;
+            width: 250px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .boot-btn:hover { background: #222; }
+
+        /* ОСНОВНАЯ СИСТЕМА */
+        #os-desktop {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: #008080;
+            position: relative;
+        }
+
+        .desktop-area {
             width: 100%;
             height: calc(100vh - 40px);
             padding: 20px;
@@ -43,12 +80,11 @@
             align-content: flex-start;
             flex-wrap: wrap;
             gap: 20px;
-            position: relative;
         }
 
         /* ЯРЛЫКИ */
         .shortcut {
-            width: 80px;
+            width: 90px;
             height: 80px;
             display: flex;
             flex-direction: column;
@@ -61,33 +97,24 @@
             text-shadow: 1px 1px 1px #000;
         }
 
-        .shortcut:hover .icon {
-            filter: brightness(1.2);
-        }
-
         .shortcut .icon {
             width: 32px;
             height: 32px;
-            background-color: #b57cff; /* Стилизованный фиолетовый сектор Края */
+            background-color: #b57cff;
             border: 2px solid #fff;
             box-shadow: 2px 2px 0 #000;
             margin-bottom: 6px;
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
             font-size: 18px;
         }
 
-        /* Центрированный файл из запроса */
         .center-file {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
-
         .center-file .icon {
             background-color: #ff0055 !important;
             animation: glitch-blink 1.5s infinite alternate;
@@ -101,14 +128,12 @@
         /* ОКНА WINDOWS 95 */
         .window {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 400px;
+            width: 420px;
             background: #cbd3d7;
             border: 2px solid #fff;
-            border-right-color: #555;
-            border-bottom-color: #555;
+            border-right-color: #555; border-bottom-color: #555;
             box-shadow: 2px 2px 0px #000;
             z-index: 1000;
             display: none;
@@ -125,30 +150,21 @@
             align-items: center;
         }
 
-        .window-header.glitched {
-            background: linear-gradient(90deg, #420427, #ff0055) !important;
-        }
+        .window-header.glitched { background: linear-gradient(90deg, #420427, #ff0055) !important; }
 
         .close-btn {
-            background: #cbd3d7;
-            border: 1px solid #fff;
-            border-right-color: #555;
-            border-bottom-color: #555;
-            font-size: 10px;
-            font-weight: bold;
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: #cbd3d7; border: 1px solid #fff;
+            border-right-color: #555; border-bottom-color: #555;
+            font-size: 10px; font-weight: bold;
+            width: 16px; height: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .window-body {
-            padding: 15px;
+            padding: 18px;
             font-size: 12px;
             color: #000;
-            text-align: center;
+            line-height: 1.4;
         }
 
         .window-footer {
@@ -161,158 +177,188 @@
         .win95-btn {
             background: #cbd3d7;
             border: 1px solid #fff;
-            border-right-color: #555;
-            border-bottom-color: #555;
-            padding: 4px 20px;
-            font-size: 12px;
-            cursor: pointer;
+            border-right-color: #555; border-bottom-color: #555;
+            padding: 4px 25px; font-size: 12px; cursor: pointer;
             box-shadow: 1px 1px 0 #000;
         }
-
         .win95-btn:active {
-            border: 1px solid #555;
-            border-right-color: #fff;
-            border-bottom-color: #fff;
-            box-shadow: none;
+            border: 1px solid #555; border-right-color: #fff; border-bottom-color: #fff; box-shadow: none;
         }
 
-        /* ПАНЕЛЬ ЗАДАЧ (TASKBAR) */
+        /* ИМИТАЦИЯ ЗАГРУЗКИ В БРАУЗЕРЕ */
+        .loading-bar-container {
+            width: 100%; background: #fff; border: 2px inset #fff; height: 20px; margin-top: 15px; display: none; position: relative;
+        }
+        .loading-fill {
+            width: 0%; height: 100%; background: #000080; transition: width 0.1s linear;
+        }
+
+        /* ПАНЕЛЬ ЗАДАЧ */
         .taskbar {
-            width: 100%;
-            height: 40px;
-            background: #cbd3d7;
-            border-top: 2px solid #fff;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2px 6px;
-            z-index: 5000;
+            width: 100%; height: 40px; background: #cbd3d7; border-top: 2px solid #fff;
+            position: fixed; bottom: 0; left: 0;
+            display: flex; align-items: center; justify-content: space-between; padding: 2px 6px; z-index: 5000;
         }
 
         .start-button {
-            background: #cbd3d7;
-            border: 2px solid #fff;
-            border-right-color: #555;
-            border-bottom-color: #555;
-            font-weight: bold;
-            font-size: 12px;
-            padding: 2px 8px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            box-shadow: 1px 1px 0 #000;
+            background: #cbd3d7; border: 2px solid #fff;
+            border-right-color: #555; border-bottom-color: #555;
+            font-weight: bold; font-size: 12px; padding: 2px 8px;
+            display: flex; align-items: center; gap: 4px; cursor: pointer; box-shadow: 1px 1px 0 #000;
         }
 
-        .start-button:active {
-            border: 2px solid #555;
-            border-right-color: #fff;
-            border-bottom-color: #fff;
-        }
-
-        /* СИСТЕМНЫЙ ТРЕЙ И ТАЙМЕР */
         .systray {
-            background: #cbd3d7;
-            border: 2px inset #fff;
-            padding: 4px 10px;
-            font-size: 11px;
-            color: #000;
-            font-weight: bold;
-            min-width: 320px;
-            text-align: right;
-            transition: background 0.5s;
+            background: #cbd3d7; border: 2px inset #fff; padding: 4px 10px;
+            font-size: 11px; color: #000; font-weight: bold; min-width: 330px; text-align: right;
         }
-
-        .systray.alert-mode {
-            background: #200336 !important;
-            color: #ff0055 !important;
-            border-color: #ff0055;
-        }
+        .systray.alert-mode { background: #200336 !important; color: #ff0055 !important; border-color: #ff0055; }
     </style>
 </head>
-<body onclick="initAudio()">
+<body class="crt">
 
     <audio id="startup-sound" src="windows-95-1995-startup.mp3" preload="auto"></audio>
 
-    <div class="desktop">
-        
-        <div class="shortcut">
-            <div class="icon">💻</div>
-            <div>My Computer</div>
+    <div id="boot-screen">
+        <div>
+            <p>CORE_OS V8.85 — INITIALIZING HARDWARE PROTOCOLS...</p>
+            <p>CORE RAM: 640KB OK</p>
+            <p>MOUNTING DIM1 sector... SUCCESSFUL</p>
+            <p>WARNING: OVERRIDE PATTERN DETECTED IN THE END DESTRUCTION ROUTINE.</p>
+            <p style="color: #ff0055; margin-top: 15px;">[ALERT]: CRITICAL SCENARIO LK VIII IS SCHEDULED.</p>
         </div>
-
-        <div class="shortcut">
-            <div class="icon">🌐</div>
-            <div>Network</div>
-        </div>
-
-        <div class="shortcut center-file" onclick="openErrorWindow()">
-            <div class="icon">👁️</div>
-            <div style="font-weight: bold; color: #ffb3d1;">broken_end_DIM1.exe</div>
+        <div>
+            <p>Нажмите кнопку для инициализации графической оболочки ядра:</p>
+            <button class="boot-btn" onclick="bootSystem()">START CORE_GATEWAY_95</button>
         </div>
     </div>
 
-    <div class="window" id="error-box">
-        <div class="window-header glitched">
-            <span>FATAL_ERROR // DIM1_BREACH</span>
-            <button class="close-btn" onclick="closeErrorWindow()">X</button>
-        </div>
-        <div class="window-body">
-            <p style="margin-bottom: 10px; font-weight: bold;">[СЦЕНАРИЙ СЕРАФИМА]: ПОПЫТКА СХРАНЕНИЯ ОШИБОЧНА.</p>
-            <p>Пакет деструкции ядра отправлен на удаленный хост. Вы не спасёте этот сектор.</p>
-        </div>
-        <div class="window-footer">
-            <button class="win95-btn" style="font-weight: bold;" onclick="goToTargetSite()">ПЕРЕЙТИ</button>
-            <button class="win95-btn" onclick="closeErrorWindow()">ОТМЕНА</button>
-        </div>
-    </div>
+    <div id="os-desktop">
+        <div class="desktop-area">
+            
+            <div class="shortcut">
+                <div class="icon">💻</div>
+                <div>My Computer</div>
+            </div>
 
-    <div class="taskbar">
-        <button class="start-button">
-            <span style="font-size:14px;">🏁</span> Start
-        </button>
-        
-        <div class="systray" id="timer-tray">
-            До критического сценария LK VIII осталось: --:--:--
+            <div class="shortcut" onclick="openExplorer()">
+                <div class="icon">🌐</div>
+                <div>Enternet Explorer</div>
+            </div>
+
+            <div class="shortcut center-file" onclick="openErrorWindow()">
+                <div class="icon">👁️</div>
+                <div style="font-weight: bold; color: #ffb3d1;">broken_end_DIM1.exe</div>
+            </div>
+
+        </div>
+
+        <div class="window" id="error-box">
+            <div class="window-header glitched">
+                <span>SECURITY_WARNING // ROOT_ACCESS</span>
+                <button class="close-btn" onclick="closeErrorWindow()">X</button>
+            </div>
+            <div class="window-body" style="text-align: left;">
+                <p style="font-weight: bold; color: #ff0055; margin-bottom: 8px;">Вы собираетесь запустить кастомную ОС от неизвестного разработчика.</p>
+                <p>(Осторожно! Приложение получит все расширения как для приложение, с учетом прав администратора и Root-прав)</p>
+            </div>
+            <div class="window-footer">
+                <button class="win95-btn" style="font-weight: bold;" onclick="goToTargetSite()">ЗАПУСТИТЬ</button>
+                <button class="win95-btn" onclick="closeErrorWindow()">ОТМЕНА</button>
+            </div>
+        </div>
+
+        <div class="window" id="explorer-box">
+            <div class="window-header">
+                <span>Enternet Explorer — Сбой подключения</span>
+                <button class="close-btn" onclick="closeExplorer()">X</button>
+            </div>
+            <div class="window-body">
+                <div id="explorer-status">Подключение к удаленным узлам...</div>
+                
+                <div class="loading-bar-container" id="loading-bar">
+                    <div class="loading-fill" id="loading-fill"></div>
+                </div>
+
+                <p id="explorer-error" style="color: #ff0055; font-weight: bold; margin-top: 15px; display: none;">
+                    [Ошибка 0x85_DIM]: Нет доступа к сети. Запрашиваемый шлюз стерт или изолирован Серафимом.
+                </p>
+            </div>
+            <div class="window-footer" id="explorer-footer" style="display: none;">
+                <button class="win95-btn" onclick="closeExplorer()">ОК</button>
+            </div>
+        </div>
+
+        <div class="taskbar">
+            <button class="start-button">
+                <span style="font-size:14px;">🏁</span> Start
+            </button>
+            
+            <div class="systray" id="timer-tray">
+                До критического сценария LK VIII осталось: --:--:--
+            </div>
         </div>
     </div>
 
     <script>
-        let audioInitialized = false;
+        // Функция включения системы и обхода автоплея звука
+        function bootSystem() {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('os-desktop').style.display = 'block';
+            
+            // Воспроизводим звук
+            const sound = document.getElementById('startup-sound');
+            sound.volume = 0.5;
+            sound.play().catch(e => console.log("Ошибка аудио"));
 
-        // Воспроизведение звука при первом взаимодействии
-        function initAudio() {
-            if (!audioInitialized) {
-                const sound = document.getElementById('startup-sound');
-                sound.volume = 0.6;
-                sound.play().catch(e => console.log("Аудио заблокировано браузером"));
-                audioInitialized = true;
-            }
+            // Инициализируем таймер
+            setInterval(updateLoreTimer, 1000);
+            updateLoreTimer();
         }
 
-        // Логика окон
-        function openErrorWindow() {
-            document.getElementById('error-box').style.display = 'block';
+        // Окно broken_end_DIM1
+        function openErrorWindow() { document.getElementById('error-box').style.display = 'block'; }
+        function closeErrorWindow() { document.getElementById('error-box').style.display = 'none'; }
+        function goToTargetSite() { window.location.href = "https://github.com/willdieOC/youdontsaveLK"; }
+
+        // Логика Enternet Explorer
+        function openExplorer() {
+            document.getElementById('explorer-box').style.display = 'block';
+            const status = document.getElementById('explorer-status');
+            const barContainer = document.getElementById('loading-bar');
+            const fill = document.getElementById('loading-fill');
+            const errMsg = document.getElementById('explorer-error');
+            const footer = document.getElementById('explorer-footer');
+
+            // Сброс оконного состояния
+            status.innerText = "Установка соединения со шлюзом github.io/youarenear...";
+            barContainer.style.display = "block";
+            fill.style.width = "0%";
+            errMsg.style.display = "none";
+            footer.style.display = "none";
+
+            // Имитация загрузки
+            let width = 0;
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    status.innerText = "Состояние: ОТКЛОНЕНО.";
+                    barContainer.style.display = "none";
+                    errMsg.style.display = "block";
+                    footer.style.display = "flex";
+                } else {
+                    width += Math.floor(Math.random() * 15) + 5;
+                    if(width > 100) width = 100;
+                    fill.style.width = width + "%";
+                }
+            }, 250);
         }
 
-        function closeErrorWindow() {
-            document.getElementById('error-box').style.display = 'none';
-        }
+        function closeExplorer() { document.getElementById('explorer-box').style.display = 'none'; }
 
-        function goToTargetSite() {
-            window.location.href = "https://github.com/willdieOC/youdontsaveLK";
-        }
-
-        // ТАЙМЕР ДО 24 ИЮНЯ 15:00 МСК
+        // ТОЧНЫЙ ТАЙМЕР (До 24 июня 15:00 МСК)
         function updateLoreTimer() {
             const tray = document.getElementById('timer-tray');
-            
-            // Целевая дата: 24 июня 2026 года, 15:00:00 по Московскому времени (UTC+3)
-            // 15:00 МСК = 12:00 UTC
-            const targetDate = new Date(Date.UTC(2026, 5, 24, 12, 0, 0)); 
+            const targetDate = new Date(Date.UTC(2026, 5, 24, 12, 0, 0)); // 15:00 МСК
             const now = new Date();
             
             let diff = targetDate - now;
@@ -320,7 +366,7 @@
 
             if (diff < 0) {
                 isNegative = true;
-                diff = Math.abs(diff); // Считаем "в минус" после прохождения точки
+                diff = Math.abs(diff);
                 tray.classList.add('alert-mode');
             }
 
@@ -333,10 +379,6 @@
 
             tray.innerText = `До критического сценария LK VIII осталось: ${sign}${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
         }
-
-        // Запуск таймера
-        setInterval(updateLoreTimer, 1000);
-        updateLoreTimer();
     </script>
 </body>
 </html>
